@@ -2,7 +2,7 @@
 
 RewriteEngine On
 RewriteCond %{THE_REQUEST} !/public/* [NC]
-RewriteCond %{THE_REQUEST} /(app|bootstrap|config|databeses|resources|storage|vendors)/.+ [NC]
+RewriteCond %{THE_REQUEST} /(app|bootstrap|config|databeses|resources|storage|vendor)/.+ [NC]
 RewriteRule ^ - [R=403,L]
 
 RewriteRule ^$ public/ [L]
