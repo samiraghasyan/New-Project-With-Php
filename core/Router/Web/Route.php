@@ -1,14 +1,15 @@
 <?php
-namespace Core\Router\Web\Route;
+namespace Core\Router\Web;
 class Route
 {
     public static function get($route,$context)
     {
         $controller = $context[0];
+
         $method = $context[1];
         global $routes;
         $routes['get'][] = array(
-            'route' => $route,
+            'route' => trim($route,'/ '),
             'controller' => $controller,
             'method' => $method
         );
@@ -20,7 +21,7 @@ class Route
         $method = $context[1];
         global $routes;
         $routes['post'][] = array(
-            'route' => $route,
+            'route' => trim($route,'/ '),
             'controller' => $controller,
             'method' => $method
         );
@@ -32,7 +33,7 @@ class Route
         $method = $context[1];
         global $routes;
         $routes['put'][] = array(
-            'route' => $route,
+            'route' => trim($route,'/ '),
             'controller' => $controller,
             'method' => $method
         );
@@ -44,7 +45,7 @@ class Route
         $method = $context[1];
         global $routes;
         $routes['delete'][] = array(
-            'route' => $route,
+            'route' => trim($route,'/ '),
             'controller' => $controller,
             'method' => $method
         );

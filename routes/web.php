@@ -1,6 +1,9 @@
 <?php
 
-use Core\Router\Web\Route\Route;
+use Core\Router\Web\Route;
+use app\Controllers\Controller;
 
-
-Route::get('/user',[]);
+Route::get('/user',[UserController::class,'index']);
+Route::post('/user',[UserController::class,'create']);
+global $routes;
+print_r($routes);
