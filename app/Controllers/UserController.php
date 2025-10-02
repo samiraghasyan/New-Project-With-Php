@@ -1,5 +1,5 @@
 <?php
-use app\Controllers\Controller;
+use App\Controllers\Controller;
 class UserController extends Controller
 {
     public function index()
@@ -9,7 +9,7 @@ class UserController extends Controller
 
     public function create()
     {
-
+        echo "UserController create function";
     }
 
     public function edit()

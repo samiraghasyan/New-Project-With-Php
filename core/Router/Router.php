@@ -55,7 +55,7 @@ class Router
                             }
                         }
 
-                        $controller = "\App\Http\Controllers\\" . $reservedRoute['controller'];
+                        $controller = "\app\Controllers\\" . $reservedRoute['controller'];
                         $object = new $controller();
                         if (method_exists($object, $reservedRoute['method'])) {
                             $reflection = new ReflectionMethod($controller, $reservedRoute['method']);

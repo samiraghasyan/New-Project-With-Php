@@ -1,5 +1,5 @@
 <?php
-namespace Core\Router\Web;
+namespace core\Router\Web;
 class Route
 {
     public static function get($route,$context)
