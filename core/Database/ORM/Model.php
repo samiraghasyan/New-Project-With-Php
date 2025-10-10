@@ -4,10 +4,11 @@ namespace Core\Database\ORM;
 
 use core\Database\Traits\HasAttributes;
 use core\Database\Traits\HasQueryBuilder;
+use core\Database\Traits\HasCRUD;
 
 abstract class Model
 {
-    use HasQueryBuilder, HasAttributes;
+    use HasQueryBuilder, HasAttributes, HasCRUD;
 
     protected $table;
     protected $fillable = [];
