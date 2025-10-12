@@ -13,7 +13,7 @@ trait HasCRUD{
         foreach ($this->fillable as $attribute){
             if(isset($this->attributes)){
                 $fillables[] = $attribute . ' = ?';
-                $this->setValue($this->attributes, $attribute);
+                $this->setValues($this->attributes, $attribute);
             }
         }
 
@@ -26,15 +26,39 @@ trait HasCRUD{
         $this->setSql("INSERT INTO {$this->table} SET ". $this->setFillabels() .$this->createdAt. "=Now();");
         $this->executeQuery();
         $this->resetQuery();
+        $object = $this->find(DBConnection::newInsertedID());
+        $defaultVariables = get_class_vars(get_called_class());
+        $all_variables = get_object_vars($object);
+        $different = array_diff(array_keys($all_variables),array_keys($defaultVariables));
+        foreach ($different as $attributes){
+            $this->$attributes = $object->$attributes;
+        }
+        $this->resetQuery();
+        return $this;
+
     }
 
     protected function update()
     {
         $this->setSql("INSERT INTO {$this->table} SET ". $this->setFillabels() .$this->updatedAt. "=Now();");
         $this->setWhere("AND ", $this->primaryKey . " = ? ");
-        $this->setValue($this->primaryKey, $this->{$this->primaryKey});
+        $this->setValues($this->primaryKey, $this->{$this->primaryKey});
         $this->executeQuery();
         $this->resetQuery();
+    }
+    
+    protected function find($id){
+        $this->setSql("SELECET * FROM ".$this->table);
+        $this->setWhere("AND",$this->primaryKey . " =? ");
+        $this->setValues($this->primaryKey, $id);
+        $statement  = $this->executeQuery();
+        $data = $statement->fetch();
+        if($data){
+            return $this->setAttributes($data);
+        }else{
+            return null;
+        }
+
     }
 
 }
