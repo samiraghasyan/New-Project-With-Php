@@ -61,4 +61,32 @@ trait HasCRUD{
 
     }
 
+    protected function get(){
+        $this->setSql("SELECT * FROM ".$this->table);
+        $statment = $this->executeQuery();
+        $data = $statment->fetchAll();
+        if($data){
+            $this->setObject($data);
+            return $this->collection;
+        }else{
+            return [];
+        }
+
+    }
+
+    protected function delete($id){
+         $object = $this;
+         $this->resetQuery();
+         if($id){
+             $object = $this->find($id);
+             $this->resetQuery();
+         }
+        $this->setSql("DELETE FROM ".$this->table);
+         $object->setWhere("AND",$this->primaryKey . " = ?");
+         $this->setValue($this->primaryKey,$object->{$object->primaryKey});
+         $this->executeQuery();
+         return $object->execute();
+
+    }
+
 }
