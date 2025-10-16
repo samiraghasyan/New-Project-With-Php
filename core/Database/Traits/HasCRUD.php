@@ -83,10 +83,28 @@ trait HasCRUD{
          }
         $this->setSql("DELETE FROM ".$this->table);
          $object->setWhere("AND",$this->primaryKey . " = ?");
-         $this->setValue($this->primaryKey,$object->{$object->primaryKey});
+         $this->setValues($this->primaryKey,$object->{$object->primaryKey});
          $this->executeQuery();
          return $object->execute();
 
     }
+    
+    protected function where($attribute, $operation, $value)
+    {
+        $condition = $attribute . ' ' . $operation . ' ? ' ;
+        $this->setValues($attribute, $value);
+        $operator = " AND ";
+        $this->setWhere($operator,$condition);
+        return $this;
+    }
 
+    protected function orderBy($attribute, $expression){
+        $this->setOrderBy($attribute,$expression);
+        return $this;
+    }
+
+    protected function limit($offset, $number){
+        $this->setLimit($offset,$number);
+        return $this;
+    }
 }
