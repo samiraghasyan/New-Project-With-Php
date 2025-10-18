@@ -1,8 +1,8 @@
 <?php
 
-namespace core\Database\Traits;
+namespace Core\Database\Traits;
 
-use core\Database\DBConnection\DBConnection;
+use Core\Database\DBConnection\DBConnection;
 
 
 trait HasCRUD{
@@ -21,7 +21,7 @@ trait HasCRUD{
     }
 
 
-    protected function insert()
+    public function insert()
     {
         $this->setSql("INSERT INTO {$this->table} SET ". $this->setFillabels() .$this->createdAt. "=Now();");
         $this->executeQuery();
@@ -50,7 +50,7 @@ trait HasCRUD{
     protected function find($id){
         $this->setSql("SELECET * FROM ".$this->table);
         $this->setWhere("AND",$this->primaryKey . " =? ");
-        $this->setValues($this->primaryKey, $id);
+        $this->setValue($this->primaryKey, $id);
         $statement  = $this->executeQuery();
         $data = $statement->fetch();
         if($data){

@@ -1,7 +1,7 @@
 <?php
 
 use Core\Router\Web\Route;
-use app\Controllers\Controller;
 
-Route::get('/',[UserController::class,'index']);
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
+
 global $routes;

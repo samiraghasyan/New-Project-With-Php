@@ -2,6 +2,7 @@
 
 namespace core\Router;
 
+use App\Http\Controllers\HomeController;
 use ReflectionMethod;
 
 class Router
@@ -55,8 +56,9 @@ class Router
                             }
                         }
 
-                        $controller = "\app\Controllers\\" . $reservedRoute['controller'];
-                        $object = new $controller();
+                        $controller = $reservedRoute['controller'];
+
+                        $object = new HomeController();
                         if (method_exists($object, $reservedRoute['method'])) {
                             $reflection = new ReflectionMethod($controller, $reservedRoute['method']);
                             $parameterCount = $reflection->getNumberOfParameters();

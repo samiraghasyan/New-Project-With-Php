@@ -2,9 +2,9 @@
 
 namespace Core\Database\ORM;
 
-use core\Database\Traits\HasAttributes;
-use core\Database\Traits\HasQueryBuilder;
-use core\Database\Traits\HasCRUD;
+use Core\Database\Traits\HasAttributes;
+use Core\Database\Traits\HasQueryBuilder;
+use Core\Database\Traits\HasCRUD;
 
 abstract class Model
 {

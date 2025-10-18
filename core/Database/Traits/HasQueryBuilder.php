@@ -1,81 +1,75 @@
 <?php
 
-namespace core\Database\Traits;
-
-use core\Database\DBConnection\DBConnection;
+namespace Core\Database\Traits;
+use Core\Database\DBConnection\DBConnection;
 
 trait HasQueryBuilder
 {
-    private string $sql = '';
-    private $where = [];
+    private $sql = '';
+    protected $where = [];
     private $orderBy = [];
     private $limit = [];
-    private $values = [];
-    private $bindingValues = [];
+    private $values=[];
+    private $bindValues = [];
+
+    // SELECT * FROM users WHERE ---- OrderBy --- ASC LIMIT 3
 
     protected function getSql(): string
     {
         return $this->sql;
     }
 
-    protected function setSql(string $sql): string
+    protected function setSql(string $sql): void
     {
-        return $this->sql = $sql;
+        $this->sql = $sql;
     }
 
-    protected function resetSql(): void
+    protected function resetSql()
     {
-        $this->sql = '';
+        $this->sql = "";
     }
 
-    protected function setWhere($operator, $conditon): void
-    {
-        $q = ['operator' => $operator, 'conditon' => $conditon];
-        $this->where[] = $q;
-    }
+    protected function setWhere($operator, $condition){
 
-    protected function resetWhere(): void
-    {
-        $this->where = [];
-    }
-
-    protected function setOrderBy($key, $expersion): void
-    {
-        $this->orderBy[] = $key . ' ' . $expersion;
+        $array = ['operator' => $operator, 'condition' => $condition];
+        array_push($this->where, $array);
 
     }
 
-    protected function resetOrderBy(): void
-    {
-        $this->orderBy = [];
+    protected function resetWhere(){
+        $this->where=[];
     }
 
-    protected function setLimit($from, $num): void
-    {
-        $this->limit['from'] = (int)$from;
-        $this->limit['num'] = (int)$num;
+    protected function setOrderBy($attribute, $expression){
+        array_push($this->orderBy, $attribute . ' ' . $expression);
     }
 
-    protected function resetLimit(): void
-    {
-        unset($this->limit['from']);
-        unset($this->limit['num']);
+    protected function resetOrderBy(){
+        $this->orderBy=[];
     }
 
-    protected function setValues($attribute, $value): void
-    {
+    protected function setLimit($offset , $number){
+        $this->limit['offset'] = (int) $offset;
+        $this->limit['number'] = (int) $number;
+    }
+
+    protected function resetLimit(){
+        unset($this->limit['offset']);
+        unset($this->limit['number']);
+    }
+
+    protected function setValue($attribute, $value){
         $this->values[$attribute] = $value;
-        $this->bindingValues[] = $value;
+        array_push($this->bindValues, $value);
+
     }
 
-    protected function resetValues(): void
-    {
+    protected function resetValues(){
         $this->values = [];
-        $this->bindingValues = [];
+        $this->bindValues=[];
     }
 
-    protected function resetQuery()
-    {
+    protected function resetQuery(){
         $this->resetSql();
         $this->resetWhere();
         $this->resetValues();
@@ -83,34 +77,48 @@ trait HasQueryBuilder
         $this->resetOrderBy();
     }
 
-    protected function executeQuery()
-    {
-        $query = "";
+    protected function executeQuery(){
+        $query="";
         $query .= $this->sql;
-        if (!empty($this->where)) {
+
+        if(!empty($this->where)){
+
             $whereQuery = "";
-            foreach ($this->where as $where) {
-                $whereQuery == "" ? $whereQuery .= $where['condition'] : $whereQuery .= $where['operator'] . " " . $where['condition'];
+            foreach($this->where as $where){
+                $whereQuery == "" ? $whereQuery .= $where['condition'] : $whereQuery .=' '. $where['operator']." ".$where['condition'];
             }
 
-            $query .= " WHERE " . $whereQuery;
+            $query .= " WHERE ". $whereQuery;
+
         }
-        if (!empty($this->orderBy)) {
-            $query .= " ORDER BY " . implode(',', $this->orderBy);
+
+        if(!empty($this->orderBy)){
+            $query .= ' ORDER BY '. implode(', ',$this->orderBy);
         }
-        if (!empty($this->limit)) {
-            $query .= ' LIMIT ' . $this->limit['number'] . ' OFFSET ' . $this->limit['offset'];
+
+
+        if(!empty($this->limit)){
+            $query .= ' LIMIT '.$this->limit['number'].' OFFSET '.$this->limit['offset'];
         }
-        $query .= " ;";
-        $pdoInstance = DBConnection::getDbConnectionInstance();
-        $statment = $pdoInstance->prepare($query);
-        if (sizeof($this->bindingValues) > sizeof($this->values)) {
-            sizeof($this->bindingValues) > 0 ? $statment->exexute($this->bindingValues) : $statment->execute();
+
+        $query .=" ;";
+        echo $query.'<hr>/';
+
+        $pdoInstance = DBConnection::getDBConnectionInstance();
+
+        $statement = $pdoInstance->prepare($query);
+
+
+        if(sizeof($this->bindValues) > sizeof($this->values))
+        {
+            sizeof($this->bindValues) > 0 ? $statement->execute($this->bindValues) : $statement->execute();
         } else {
-            sizeof($this->values) > 0 ? $statment->exexute($this->values) : $statment->execute();
+            sizeof($this->values) > 0 ? $statement->execute(array_values($this->values)) : $statement->execute();
         }
-        return $statment;
+        return $statement;
+
     }
+
 
 
 }

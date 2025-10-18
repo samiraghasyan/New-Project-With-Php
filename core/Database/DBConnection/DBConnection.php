@@ -1,7 +1,8 @@
 <?php
-namespace core\Database\DBConnection;
+namespace Core\Database\DBConnection;
 
 use PDO;
+use PDOException;
 class DBConnection
 {
     private static $dbconnection_instance = null;
@@ -21,24 +22,21 @@ class DBConnection
         }
     }
 
-    public function dbConnection()
-    {
-        $server_name = DBHOST;
-        $database = DBNAME;
-        $user_name = DBUSERNAME;
-        $pass = DBPASS;
-        try {
-            $conn = new PDO("mysql:$server_name;dbname:$database",$user_name,$pass);
-            $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            echo  'Connect success';
-        }catch (\PDOException $e){
-            echo $e->getMessage();
+    private function dbConnection(){
+
+        $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC);
+        try{
+            return new PDO("mysql:host=" . DBHOST . ";dbname=" . DBNAME, DBUSERNAME, DBPASS, $options);
+        }
+        catch (PDOException $e){
+            echo "error in database connection: " . $e->getMessage();
             return false;
         }
+
     }
 
     public static function newInsertedID()
     {
-        return self::getDbConnectionInstance()->lastInsertedId();
+        return self::getDBConnectionInstance()->lastInsertId();
     }
 }
