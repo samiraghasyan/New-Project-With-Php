@@ -13,7 +13,7 @@ trait HasCRUD{
         foreach ($this->fillable as $attribute){
             if(isset($this->attributes)){
                 $fillables[] = $attribute . ' = ?';
-                $this->setValues($this->attributes, $attribute);
+                $this->setValue($this->attributes, $attribute);
             }
         }
 

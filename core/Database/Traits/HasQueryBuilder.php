@@ -102,11 +102,10 @@ trait HasQueryBuilder
         }
 
         $query .=" ;";
-        echo $query.'<hr>/';
-
+        echo $query.'<hr>';
         $pdoInstance = DBConnection::getDBConnectionInstance();
-
         $statement = $pdoInstance->prepare($query);
+
 
 
         if(sizeof($this->bindValues) > sizeof($this->values))
@@ -116,7 +115,6 @@ trait HasQueryBuilder
             sizeof($this->values) > 0 ? $statement->execute(array_values($this->values)) : $statement->execute();
         }
         return $statement;
-
     }
 
 

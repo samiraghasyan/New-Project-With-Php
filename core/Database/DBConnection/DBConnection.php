@@ -14,9 +14,11 @@ class DBConnection
 
     public static function getDbConnectionInstance()
     {
+
         if(self::$dbconnection_instance == null){
+
             $dbConnectionInstance = new DBConnection();
-            self::$dbconnection_instance = $dbConnectionInstance->dbConnection();
+            return self::$dbconnection_instance = $dbConnectionInstance->dbConnection();
         }else{
             return self::$dbconnection_instance;
         }
