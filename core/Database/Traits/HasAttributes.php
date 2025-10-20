@@ -3,27 +3,28 @@
 namespace core\Database\Traits;
 trait HasAttributes
 {
-    protected function setAttributes(array $array, $object = null)
-    {
-        if (!$object) {
-            $class = get_called_class();
-            $object = new $class;
-        }
+    protected function setAttributes(array $array, $object = null){
 
-        foreach ($array as $attribute => $value) {
+        if(!$object){
+            $className = get_called_class();
+            $object = new $className;
+        }
+        foreach($array as $attribute=>$value){
             $object->$attribute = $value;
         }
-
         return $object;
     }
 
-    protected function setObject(array $array)
-    {
+    protected function setObject(array $array){
+
         $collection = [];
-        foreach ($array as $key => $value){
-            $object = $this->setAttributes($array, $value);
-            $collection[]=$object;
+
+        foreach ($array as $value){
+            $object = $this->setAttributes($value);
+            array_push($collection, $object);
         }
+
         $this->collection = $collection;
+
     }
 }
